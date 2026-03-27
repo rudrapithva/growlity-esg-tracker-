@@ -9,8 +9,14 @@ const AdminLogin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { adminLogin } = useAuth();
+    const { adminLogin, adminAuth } = useAuth();
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if (adminAuth) {
+            navigate('/admin');
+        }
+    }, [adminAuth, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

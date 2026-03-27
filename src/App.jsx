@@ -19,13 +19,15 @@ import AdminSettings from './pages/admin/AdminSettings'
 import AdminLogin from './pages/admin/AdminLogin'
 
 const ProtectedRoute = ({ children }) => {
-  const { currentUser } = useAuth()
+  const { currentUser, loading } = useAuth()
+  if (loading) return <div className="loading-spinner">Verifying session...</div>
   if (!currentUser) return <Navigate to="/login" />
   return children
 }
 
 const AdminRoute = ({ children }) => {
-  const { adminAuth } = useAuth()
+  const { adminAuth, loading } = useAuth()
+  if (loading) return <div className="loading-spinner">Verifying admin...</div>
   if (!adminAuth) return <Navigate to="/main-access" replace />
   return children
 }

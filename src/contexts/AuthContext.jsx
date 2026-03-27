@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, googleProvider } from '../firebase';
 import { verifyAdminCredentials } from '../services/adminService';
 import { 
-  signInWithPopup, 
+  signInWithPopup,
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
@@ -12,7 +12,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-export const AuthContext = createContext();
+import { AuthContext } from './AuthContextInstance';
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -55,12 +55,26 @@ export function AuthProvider({ children }) {
   const updateName = async (newName) => {
     if (!auth.currentUser) throw new Error("No user authenticated");
     
-    // 1. Update Firebase Auth Profile
+    // 1. Update Firebase Auth Profile (Primary for UI)
     await updateProfile(auth.currentUser, { displayName: newName });
     
-    // 2. Update Firestore User Document (if it exists or create it)
-    const userRef = doc(db, 'users', auth.currentUser.uid);
-    await setDoc(userRef, { name: newName }, { merge: true });
+    // 2. Update Firestore User Document (Best-effort sync)
+    // We try multiple paths based on established patterns in the codebase
+    try {
+      const userRef = doc(db, 'users', auth.currentUser.uid);
+      await setDoc(userRef, { name: newName, email: auth.currentUser.email }, { merge: true });
+    } catch (e) {
+      console.warn("Firestore 'users' sync skipped (permissions):", e.message);
+    }
+
+    try {
+      if (auth.currentUser.email) {
+        const dataRef = doc(db, 'user_data', auth.currentUser.email);
+        await setDoc(dataRef, { profileName: newName }, { merge: true });
+      }
+    } catch (e) {
+      console.warn("Firestore 'user_data' sync skipped:", e.message);
+    }
     
     // 3. Refresh local state
     setCurrentUser({ ...auth.currentUser, displayName: newName });
@@ -123,6 +137,7 @@ export function AuthProvider({ children }) {
     currentUser,
     isAdmin,
     adminAuth,
+    loading,
     login,
     signup,
     logout,

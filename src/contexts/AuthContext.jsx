@@ -1,22 +1,20 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, googleProvider } from '../firebase';
+import { verifyAdminCredentials } from '../services/adminService';
 import { 
   signInWithPopup, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  updateProfile
 } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminAuth, setAdminAuth] = useState(() => {
@@ -53,9 +51,23 @@ export const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  // Update User Profile Name
+  const updateName = async (newName) => {
+    if (!auth.currentUser) throw new Error("No user authenticated");
+    
+    // 1. Update Firebase Auth Profile
+    await updateProfile(auth.currentUser, { displayName: newName });
+    
+    // 2. Update Firestore User Document (if it exists or create it)
+    const userRef = doc(db, 'users', auth.currentUser.uid);
+    await setDoc(userRef, { name: newName }, { merge: true });
+    
+    // 3. Refresh local state
+    setCurrentUser({ ...auth.currentUser, displayName: newName });
+  };
+
   // Dedicated Admin Portal Auth (Gatekeeper)
   const adminLogin = async (email, password) => {
-    const { verifyAdminCredentials } = await import('../services/adminService');
     const result = await verifyAdminCredentials(email, password);
     if (result.success) {
       setAdminAuth(result.profile);
@@ -80,10 +92,20 @@ export const AuthProvider = ({ children }) => {
         try {
           // Check Firestore for explicit role
           const userDoc = await getDoc(doc(db, 'users', user.uid));
-          const userData = userDoc.data();
-          setIsAdmin(isEmailAdmin || (userData?.role === 'Platform ESG Admin' || userData?.role === 'admin'));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setIsAdmin(isEmailAdmin || (userData?.role === 'Platform ESG Admin' || userData?.role === 'admin'));
+          } else {
+            // No document exists, just use email check
+            setIsAdmin(isEmailAdmin);
+          }
         } catch (e) {
-          console.warn("Could not fetch user role from Firestore, falling back to email check.");
+          // If permission is denied, fallback to email check silently or with informative error
+          if (e.code === 'permission-denied') {
+            console.debug("Firestore role fetch: Permission denied. Ensure 'users' collection rules permit read.");
+          } else {
+            console.error("Firestore role fetch error:", e);
+          }
           setIsAdmin(isEmailAdmin);
         }
       } else {
@@ -104,6 +126,7 @@ export const AuthProvider = ({ children }) => {
     login,
     signup,
     logout,
+    updateName,
     googleSignIn,
     adminLogin,
     adminLogout
@@ -114,4 +137,4 @@ export const AuthProvider = ({ children }) => {
       {!loading && children}
     </AuthContext.Provider>
   );
-};
+}

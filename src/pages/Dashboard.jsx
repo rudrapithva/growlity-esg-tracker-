@@ -3,7 +3,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 import { Globe, Flame, Plug, Recycle, TrendingDown, TrendingUp, Plus, Download, AlertTriangle, Zap, CheckCircle, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { getHistory } from '../services/carbonService';
 import { generateESGReport } from '../services/reportService';
 
@@ -16,27 +16,30 @@ const Dashboard = () => {
   const [percentChange, setPercentChange] = useState(0);
 
   useEffect(() => {
-    const logs = getHistory(currentUser?.email);
-    setHistory(logs);
+    const fetchData = async () => {
+      const logs = await getHistory(currentUser?.email);
+      setHistory(logs);
 
-    if (logs.length > 0) {
-      const latest = logs[0];
-      setMetrics({
-        total: latest.total,
-        s1: latest.s1,
-        s2: latest.s2,
-        s3: latest.s3,
-      });
+      if (logs.length > 0) {
+        const latest = logs[0];
+        setMetrics({
+          total: latest.total,
+          s1: latest.s1,
+          s2: latest.s2,
+          s3: latest.s3,
+        });
 
-      if (logs.length > 1) {
-        const prev = logs[1];
-        if (prev.total > 0) {
-          const change = ((latest.total - prev.total) / prev.total) * 100;
-          setPercentChange(change);
+        if (logs.length > 1) {
+          const prev = logs[1];
+          if (prev.total > 0) {
+            const change = ((latest.total - prev.total) / prev.total) * 100;
+            setPercentChange(change);
+          }
         }
       }
-    }
-  }, []);
+    };
+    fetchData();
+  }, [currentUser]);
 
   const chartData = {
     labels: history.slice(0, 6).reverse().map(r => r.date.substring(5)) || [],

@@ -6,7 +6,8 @@ import Calculator from './pages/Calculator'
 import History from './pages/History'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
-import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
+import { useAuth } from './hooks/useAuth'
 import { Navigate } from 'react-router-dom'
 
 // Admin Components

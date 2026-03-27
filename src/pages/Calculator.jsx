@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Building2, TrendingUp, Users, Fuel, Car, Zap, Plane, Trash2, ArrowRight, ArrowLeft, Calculator as CalcIcon, Cloud, Flame, Calendar, CircleDollarSign, Shield, Download, Edit } from 'lucide-react';
-import { calculateEmissions, saveRecord } from '../services/carbonService';
+import { calculateEmissions, saveRecord, getSettings } from '../services/carbonService';
 import { generateESGReport } from '../services/reportService';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -25,6 +25,19 @@ const CalculatorPage = () => {
     waste: '',
   });
 
+  React.useEffect(() => {
+    if (currentUser?.email) {
+      const settings = getSettings(currentUser.email);
+      if (settings?.name) {
+        setFormData(prev => ({
+          ...prev,
+          companyName: prev.companyName || settings.name,
+          industry: prev.industry || settings.industry || ''
+        }));
+      }
+    }
+  }, [currentUser]);
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -39,9 +52,9 @@ const CalculatorPage = () => {
 
   const prevStep = () => setStep(step - 1);
 
-  const handleCalculate = () => {
+  const handleCalculate = async () => {
     const results = calculateEmissions(formData);
-    const record = saveRecord(currentUser?.email, formData, results);
+    const record = await saveRecord(currentUser?.email, formData, results);
     setCurrentRecord(record);
     setStep(5);
   };

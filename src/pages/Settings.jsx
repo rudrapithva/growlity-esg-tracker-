@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Factory, DollarSign, Zap, Fuel, Plane, Sliders } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { getSettings, saveSettings, getFactors, saveFactors } from '../services/carbonService';
 
 const Settings = () => {

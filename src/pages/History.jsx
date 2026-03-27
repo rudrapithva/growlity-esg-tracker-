@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Trash2, Filter } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { getHistory, deleteHistory } from '../services/carbonService';
 import { generateESGReport } from '../services/reportService';
 
@@ -11,9 +11,12 @@ const History = () => {
   const [riskFilter, setRiskFilter] = useState('All');
 
   useEffect(() => {
-    const data = getHistory(currentUser?.email);
-    setCompleteHistory(data);
-    setFilteredHistory(data);
+    const fetchData = async () => {
+      const data = await getHistory(currentUser?.email);
+      setCompleteHistory(data);
+      setFilteredHistory(data);
+    };
+    fetchData();
   }, [currentUser]);
 
   useEffect(() => {
@@ -24,9 +27,9 @@ const History = () => {
     }
   }, [riskFilter, completeHistory]);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to permanently delete this historical record?')) {
-      const updated = deleteHistory(currentUser?.email, id);
+      const updated = await deleteHistory(currentUser?.email, id);
       setCompleteHistory(updated);
     }
   };

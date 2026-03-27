@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Globe
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const AdminSidebar = () => {
   const { adminLogout } = useAuth();

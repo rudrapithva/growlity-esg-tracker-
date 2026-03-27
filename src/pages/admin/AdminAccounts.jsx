@@ -70,11 +70,11 @@ const AdminAccounts = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ 
                       width: '32px', height: '32px', borderRadius: '50%', 
-                      background: 'var(--primary-muted)', color: 'var(--primary)',
+                      background: 'var(--primary)', color: 'white',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', 
                       fontWeight: 600, fontSize: '0.75rem'
                     }}>
-                      {client.email.substring(0, 2).toUpperCase()}
+                      {client.email.charAt(0).toUpperCase()}
                     </div>
                     <div>
                       <div style={{ fontWeight: 600 }}>{client.email}</div>

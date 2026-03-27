@@ -1,4 +1,5 @@
-// EMISSION_FACTORS now handled by getFactors()
+import { db } from '../firebase';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 export const calculateEmissions = (userData) => {
   const factors = getFactors();
@@ -36,7 +37,7 @@ export const calculateEmissions = (userData) => {
   };
 };
 
-export const saveRecord = (userEmail, userData, results) => {
+export const saveRecord = async (userEmail, userData, results) => {
   if (!userEmail) return null;
   const record = {
     userEmail,
@@ -51,22 +52,72 @@ export const saveRecord = (userEmail, userData, results) => {
     fullData: userData,
   };
 
+  // 1. Local Storage Sync (Immediate feedback)
   let history = JSON.parse(localStorage.getItem(`carbon_history_${userEmail}`) || "[]");
   history.unshift(record);
   localStorage.setItem(`carbon_history_${userEmail}`, JSON.stringify(history));
+
+  // 2. Firestore Sync (Global persistence)
+  try {
+    const userDocRef = doc(db, 'user_data', userEmail);
+    // Ensure document exists with history array
+    const docSnap = await getDoc(userDocRef);
+    if (!docSnap.exists()) {
+      await setDoc(userDocRef, { history: [record] });
+    } else {
+      await updateDoc(userDocRef, {
+        history: arrayUnion(record)
+      });
+    }
+  } catch (e) {
+    console.error("Firestore sync failed:", e);
+  }
+
   return record;
 };
 
-export const getHistory = (userEmail) => {
+export const getHistory = async (userEmail) => {
     if (!userEmail) return [];
+    
+    // Attempt Firestore fetch for source of truth
+    try {
+        const docSnap = await getDoc(doc(db, 'user_data', userEmail));
+        if (docSnap.exists()) {
+            const firestoreHistory = docSnap.data().history || [];
+            // Sort by date descending (assuming record has date or we just trust the array order)
+            // But Firestore arrayUnion appends to end, so we might need to reverse or sort
+            const sorted = [...firestoreHistory].reverse(); 
+            // Sync back to local storage
+            localStorage.setItem(`carbon_history_${userEmail}`, JSON.stringify(sorted));
+            return sorted;
+        }
+    } catch (e) {
+        console.warn("Firestore fetch failed, falling back to local storage:", e);
+    }
+
     return JSON.parse(localStorage.getItem(`carbon_history_${userEmail}`) || "[]");
 };
 
-export const deleteHistory = (userEmail, id) => {
+export const deleteHistory = async (userEmail, id) => {
     if (!userEmail) return [];
-    let history = getHistory(userEmail);
+    
+    // 1. Local Update
+    let history = JSON.parse(localStorage.getItem(`carbon_history_${userEmail}`) || "[]");
     history = history.filter(h => h.id !== id);
     localStorage.setItem(`carbon_history_${userEmail}`, JSON.stringify(history));
+
+    // 2. Firestore update
+    try {
+        const docSnap = await getDoc(doc(db, 'user_data', userEmail));
+        if (docSnap.exists()) {
+            const firestoreHistory = docSnap.data().history || [];
+            const filtered = firestoreHistory.filter(h => h.id !== id);
+            await updateDoc(doc(db, 'user_data', userEmail), { history: filtered });
+        }
+    } catch (e) {
+        console.error("Firestore deletion failed:", e);
+    }
+
     return history;
 };
 

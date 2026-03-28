@@ -5,36 +5,47 @@ import { getPlatformMetrics } from '../../services/adminService';
 const AdminDashboard = () => {
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const formatNumber = (num) => {
     if (!num && num !== 0) return '0';
-    const absNum = Math.abs(num);
-    const units = ['', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y'];
-    let tier = Math.log10(absNum) / 3 | 0;
-    if (tier < 0) tier = 0;
-    if (tier === 0) return num.toFixed(2);
-    
-    const maxTier = units.length - 1;
-    const finalTier = Math.min(tier, maxTier);
-    const suffix = units[finalTier];
-    const scale = Math.pow(10, finalTier * 3);
-    const scaled = num / scale;
-    return scaled.toFixed(2) + ' ' + suffix;
+    try {
+      const absNum = Math.abs(num);
+      const units = ['', 'K', 'M', 'B', 'T', 'P', 'E', 'Z', 'Y'];
+      let tier = Math.log10(absNum) / 3 | 0;
+      if (tier < 0) tier = 0;
+      if (tier === 0) return num.toFixed(2);
+      
+      const maxTier = units.length - 1;
+      const finalTier = Math.min(tier, maxTier);
+      const suffix = units[finalTier];
+      const scale = Math.pow(10, finalTier * 3);
+      const scaled = num / scale;
+      return scaled.toFixed(2) + ' ' + suffix;
+    } catch (err) {
+      return '0';
+    }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const data = await getPlatformMetrics();
         setMetrics(data);
       } catch (e) {
         console.error(e);
+        setError(e.code === 'permission-denied' 
+          ? 'Secure Access Restricted: You must be signed in with global administrator privileges.' 
+          : 'Connectivity issue detected. Failed to retrieve platform metrics.');
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  if (loading) return <div className="loading-spinner">Aggregating Platform Data...</div>;
 
   if (loading) return <div className="loading-spinner">Aggregating Platform Data...</div>;
 
@@ -57,7 +68,7 @@ const AdminDashboard = () => {
           <div className="kpi-top">
             <div className="kpi-content">
               <h3>Total Platform CO2</h3>
-              <p className="kpi-value" title={metrics?.totalCO2.toLocaleString()}>
+              <p className="kpi-value" title={metrics?.totalCO2?.toLocaleString() || '0'}>
                 {formatNumber(metrics?.totalCO2)}
               </p>
             </div>
@@ -72,7 +83,7 @@ const AdminDashboard = () => {
           <div className="kpi-top">
             <div className="kpi-content">
               <h3>Enterprise Clients</h3>
-              <p className="kpi-value">{metrics?.totalUsers}</p>
+              <p className="kpi-value">{metrics?.totalUsers || 0}</p>
             </div>
             <div className="kpi-icon"><Users size={22} /></div>
           </div>
@@ -85,7 +96,7 @@ const AdminDashboard = () => {
           <div className="kpi-top">
             <div className="kpi-content">
               <h3>Calculations Logged</h3>
-              <p className="kpi-value">{metrics?.totalLogs}</p>
+              <p className="kpi-value">{metrics?.totalLogs || 0}</p>
             </div>
             <div className="kpi-icon"><Activity size={22} /></div>
           </div>
@@ -98,7 +109,7 @@ const AdminDashboard = () => {
           <div className="kpi-top">
             <div className="kpi-content">
               <h3>Avg Impact/Client</h3>
-              <p className="kpi-value" title={metrics?.avgImpact.toLocaleString()}>
+              <p className="kpi-value" title={metrics?.avgImpact?.toLocaleString() || '0'}>
                 {formatNumber(metrics?.avgImpact)}
               </p>
             </div>

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ mobileOpen, onClose }) => {
   const { adminLogout } = useAuth();
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-header" style={{ flexDirection: 'column', alignItems: 'flex-start', height: 'auto', padding: '1.5rem', gap: '1rem', borderBottom: '1px solid var(--border-color)' }}>
         <img src="/assets/Growlity-Logo.webp" alt="Growlity" className="sidebar-logo" style={{ maxWidth: '120px', height: 'auto' }} />
         <div className="sidebar-info" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -49,6 +49,7 @@ const AdminSidebar = () => {
               key={item.path} 
               to={item.path} 
               end={item.end}
+              onClick={onClose}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
               <item.icon className="nav-icon" size={20} />

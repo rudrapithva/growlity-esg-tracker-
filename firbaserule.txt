@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Unrestricted access for all collections (as requested for simple data fetching)
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

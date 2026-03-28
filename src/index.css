@@ -441,6 +441,8 @@ a:hover {
     font-weight: 800;
     color: var(--text-primary);
     margin: 0.25rem 0;
+    word-break: break-all;
+    line-height: 1.2;
 }
 
 .kpi-footer {
@@ -474,6 +476,7 @@ td {
     padding: 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
+    word-break: break-word;
 }
 
 th {
@@ -897,6 +900,20 @@ textarea:focus {
 
     .sidebar.mobile-open {
         transform: translateX(0);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 95;
+        transition: var(--transition);
+        display: block;
     }
 
     .grid-2,
@@ -906,5 +923,29 @@ textarea:focus {
 
     .auth-side {
         display: none;
+    }
+
+    .kpi-value {
+        font-size: 1.5rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .mobile-only-flex {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-value {
+        font-size: 1.25rem;
+    }
+    
+    .page-content {
+        padding: 1rem;
     }
 }

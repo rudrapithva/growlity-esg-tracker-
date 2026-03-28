@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';
+import { Line, Doughnut } from 'react-chartjs-2';
 import { Globe, Flame, Plug, Recycle, TrendingDown, TrendingUp, Plus, Download, AlertTriangle, Zap, CheckCircle, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { getHistory } from '../services/carbonService';
 import { generateESGReport } from '../services/reportService';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler, ArcElement);
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
@@ -21,14 +21,21 @@ const Dashboard = () => {
       setHistory(logs);
 
       if (logs.length > 0) {
-        const latest = logs[0];
+        // Calculate Aggregate Metrics (Sum of all calculations)
+        const totalSum = logs.reduce((acc, curr) => acc + (curr.total || 0), 0);
+        const s1Sum = logs.reduce((acc, curr) => acc + (curr.s1 || 0), 0);
+        const s2Sum = logs.reduce((acc, curr) => acc + (curr.s2 || 0), 0);
+        const s3Sum = logs.reduce((acc, curr) => acc + (curr.s3 || 0), 0);
+
         setMetrics({
-          total: latest.total,
-          s1: latest.s1,
-          s2: latest.s2,
-          s3: latest.s3,
+          total: totalSum,
+          s1: s1Sum,
+          s2: s2Sum,
+          s3: s3Sum,
         });
 
+        // Trend still compares the two most recent records
+        const latest = logs[0];
         if (logs.length > 1) {
           const prev = logs[1];
           if (prev.total > 0) {
@@ -66,6 +73,31 @@ const Dashboard = () => {
     },
   };
 
+  const doughnutData = {
+    labels: ['Direct (S1)', 'Indirect (S2)', 'Supply Chain (S3)'],
+    datasets: [
+      {
+        data: [metrics.s1, metrics.s2, metrics.s3],
+        backgroundColor: [
+          '#6366f1', // purple-600
+          '#3b82f6', // blue-500
+          '#f59e0b', // amber-500
+        ],
+        borderWidth: 0,
+        hoverOffset: 15,
+      },
+    ],
+  };
+
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, font: { size: 10 } } },
+    },
+    cutout: '70%',
+  };
+
   return (
     <>
       <div className="page-header">
@@ -84,7 +116,7 @@ const Dashboard = () => {
         <div className="kpi-card purple">
           <div className="kpi-top">
             <div className="kpi-content">
-              <h3>Total ESG Emissions</h3>
+              <h3>Cumulative ESG Impact</h3>
               <p className="kpi-value">{metrics.total.toLocaleString()}</p>
             </div>
             <div className="kpi-icon"><Globe size={22} /></div>
@@ -158,6 +190,21 @@ const Dashboard = () => {
           </div>
         </div>
 
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title">Scope Distribution</div>
+          </div>
+          <div style={{ height: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            {history.length > 0 ? (
+               <Doughnut data={doughnutData} options={doughnutOptions} />
+            ) : (
+              <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No data available</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid-7-5" style={{ marginTop: '2rem' }}>
         <div className="card">
           <div className="card-header">
             <div className="card-title">Recent Activity</div>

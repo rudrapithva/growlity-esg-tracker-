@@ -10,9 +10,18 @@ const AdminSettings = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getGlobalFactors();
-      setFactors(data);
-      setLoading(false);
+      try {
+        const data = await getGlobalFactors();
+        if (data) {
+          setFactors(data);
+        } else {
+          setMessage('Failed to load global factors. Ensure you have administrator permissions.');
+        }
+      } catch (err) {
+        setMessage('Connectivity error: Could not retrieve settings.');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);

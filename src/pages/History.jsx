@@ -112,10 +112,10 @@ const History = () => {
                   <tr key={record.id}>
                     <td style={{ fontWeight: 600 }}>{record.date}</td>
                     <td>{record.entity}</td>
-                    <td>{record.s1.toFixed(1)} <small>t</small></td>
-                    <td>{record.s2.toFixed(1)} <small>t</small></td>
-                    <td>{record.s3.toFixed(1)} <small>t</small></td>
-                    <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{record.total.toFixed(1)} <small>tCO2e</small></td>
+                    <td>{record.s1.toFixed(3)} <small>t</small></td>
+                    <td>{record.s2.toFixed(3)} <small>t</small></td>
+                    <td>{record.s3.toFixed(3)} <small>t</small></td>
+                    <td style={{ fontWeight: 800, color: 'var(--text-primary)' }}>{record.total.toFixed(3)} <small>tCO2e</small></td>
                     <td>
                       <span className={`badge badge-${record.risk === 'High' ? 'danger' : record.risk === 'Medium' ? 'warning' : 'success'}`}>
                         {record.risk}

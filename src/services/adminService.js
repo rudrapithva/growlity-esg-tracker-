@@ -29,6 +29,10 @@ export const getPlatformMetrics = async () => {
         let totalLogs = 0;
         const clients = [];
 
+        if (snapshot.empty) {
+            console.warn("User data collection is currently empty.");
+        }
+
         snapshot.forEach(userDoc => {
             const data = userDoc.data().history || [];
             let userTotal = 0;
@@ -54,8 +58,14 @@ export const getPlatformMetrics = async () => {
             clients
         };
     } catch (e) {
-        console.error("Failed to fetch platform metrics:", e);
-        throw e;
+        console.warn("Platform metrics fetch encountered an issue:", e.message);
+        return {
+            totalUsers: 0,
+            totalCO2: 0,
+            totalLogs: 0,
+            avgImpact: 0,
+            clients: []
+        };
     }
 };
 

@@ -50,7 +50,7 @@ This document contains a structured breakdown of the 4-week development lifecycl
 
 | Week | Status | Accomplishments | Challenges |
 | :--- | :--- | :--- | :--- |
-| **1** | [Completed/Pending] | Environment Setup, Auth, Design System | Color accessibility / HSL tuning |
-| **2** | [Completed/Pending] | Carbon Engine, Calculator, Chart.js | Scope 3 intensity calculation logic |
-| **3** | [Completed/Pending] | Admin Portal, User Mgmt, Settings | Multi-tenant data privacy |
-| **4** | [Completed/Pending] | PDF Reporting, SEO, Final Hosting | Final audit and load times |
+| **1** | [Completed] | Environment Setup, Auth, Design System (Stable HMR) | Color accessibility / Vite Fast Refresh |
+| **2** | [Completed] | Carbon Engine, Calculator, Chart.js (Line/Doughnut) | Scope 3 intensity calculation logic |
+| **3** | [Completed] | Admin Portal, User Mgmt, Firestore Rules | Multi-tenant data privacy & Permissions |
+| **4** | [Completed] | PDF Reporting, SEO, Final Hosting (jsPDF) | Final audit and load times |

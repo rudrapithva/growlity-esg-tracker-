@@ -264,7 +264,7 @@ const CalculatorPage = () => {
                 <div className="kpi-top">
                   <div className="kpi-content">
                     <h3 style={{ fontSize: '0.7rem' }}>Total Carbon Intensity</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.total?.toLocaleString(undefined, {maximumFractionDigits:1})}</p>
+                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.total?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
                   <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Cloud size={20} /></div>
                 </div>
@@ -277,7 +277,7 @@ const CalculatorPage = () => {
                 <div className="kpi-top">
                   <div className="kpi-content">
                     <h3 style={{ fontSize: '0.7rem' }}>Direct (Scope 1)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s1?.toLocaleString(undefined, {maximumFractionDigits:1})}</p>
+                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s1?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
                   <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Flame size={20} /></div>
                 </div>
@@ -290,7 +290,7 @@ const CalculatorPage = () => {
                 <div className="kpi-top">
                   <div className="kpi-content">
                     <h3 style={{ fontSize: '0.7rem' }}>Energy (Scope 2)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s2?.toLocaleString(undefined, {maximumFractionDigits:1})}</p>
+                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s2?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
                   <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Zap size={20} /></div>
                 </div>
@@ -303,7 +303,7 @@ const CalculatorPage = () => {
                 <div className="kpi-top">
                   <div className="kpi-content">
                     <h3 style={{ fontSize: '0.7rem' }}>Supply Chain (Scope 3)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s3?.toLocaleString(undefined, {maximumFractionDigits:1})}</p>
+                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s3?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
                   <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Plane size={20} /></div>
                 </div>

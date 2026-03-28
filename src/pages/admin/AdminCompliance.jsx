@@ -1,31 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Download, ShieldCheck, Clock, FileCheck, AlertCircle } from 'lucide-react';
+import { Search, Download, ShieldCheck, Clock, FileCheck, AlertCircle, ShieldAlert } from 'lucide-react';
 import { getPlatformMetrics } from '../../services/adminService';
 
 const AdminCompliance = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const data = await getPlatformMetrics();
         const allLogs = [];
-        data.clients.forEach(client => {
-          client.history.forEach(log => {
-            allLogs.push({
-              ...log,
-              enterprise: client.email,
-              timestamp: log.date || 'N/A'
+        
+        if (data && data.clients) {
+          data.clients.forEach(client => {
+            const history = client.history || [];
+            history.forEach(log => {
+              allLogs.push({
+                ...log,
+                enterprise: client.email,
+                timestamp: log.date || 'N/A'
+              });
             });
           });
-        });
+        }
         
         // Sort by date (newest first)
         allLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         setLogs(allLogs);
       } catch (e) {
         console.error(e);
+        setError(e.code === 'permission-denied' 
+          ? 'Secure Access Restricted: Administrator privileges required.' 
+          : 'Failed to retrieve compliance audit logs.');
       } finally {
         setLoading(false);
       }

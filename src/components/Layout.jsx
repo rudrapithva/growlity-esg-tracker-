@@ -3,11 +3,14 @@ import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 
 const Layout = ({ children }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
   return (
     <div className="app-layout">
-      <Sidebar />
+      {isMobileMenuOpen && <div className="sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)} />}
+      <Sidebar mobileOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       <main className="main-wrapper">
-        <TopBar />
+        <TopBar onMenuClick={() => setIsMobileMenuOpen(true)} />
         <div className="page-content">
           {children}
         </div>

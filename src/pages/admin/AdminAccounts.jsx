@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, ShieldCheck, Mail, Calculator, Globe } from 'lucide-react';
+import { Search, Filter, ShieldCheck, Mail, Calculator, Globe, ShieldAlert } from 'lucide-react';
 import { getPlatformMetrics } from '../../services/adminService';
 
 const AdminAccounts = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
         const data = await getPlatformMetrics();
-        setClients(data.clients);
+        setClients(data.clients || []);
       } catch (e) {
         console.error(e);
+        setError(e.code === 'permission-denied' 
+          ? 'Secure Access Restricted: Administrator privileges required.' 
+          : 'Failed to retrieve account data.');
       } finally {
         setLoading(false);
       }

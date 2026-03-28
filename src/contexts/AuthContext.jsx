@@ -82,13 +82,30 @@ export function AuthProvider({ children }) {
 
   // Dedicated Admin Portal Auth (Gatekeeper)
   const adminLogin = async (email, password) => {
-    const result = await verifyAdminCredentials(email, password);
-    if (result.success) {
-      setAdminAuth(result.profile);
-      sessionStorage.setItem('growlity_admin_session', 'active');
-      sessionStorage.setItem('growlity_admin_profile', JSON.stringify(result.profile));
+    try {
+      // 1. Verify credentials against the special config doc (Gatekeeper)
+      const result = await verifyAdminCredentials(email, password);
+      
+      if (result.success) {
+        // 2. IMPORTANT: Synchronize with Firebase Auth to satisfy Firestore Security Rules
+        // The admin must be a valid Firebase Auth user for the 'isAdmin()' rule to work.
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+        } catch (authError) {
+          console.warn("Firebase Auth sync skipped or failed during admin login:", authError.message);
+          // We continue because verifyAdminCredentials already succeeded for the UI,
+          // but Firestore operations might fail if the user doesn't exist in Auth.
+        }
+
+        setAdminAuth(result.profile);
+        sessionStorage.setItem('growlity_admin_session', 'active');
+        sessionStorage.setItem('growlity_admin_profile', JSON.stringify(result.profile));
+      }
+      return result;
+    } catch (e) {
+      console.error("Admin login process error:", e);
+      return { success: false, message: "Internal authentication error." };
     }
-    return result;
   };
 
   const adminLogout = () => {

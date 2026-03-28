@@ -12,24 +12,29 @@ export const calculateEmissions = (userData) => {
     (userData.flights || 0) * factors.flights +
     (userData.waste || 0) * factors.waste;
 
+  const empCount = Math.max(1, parseInt(userData.employees) || 1);
   const totalMonthly = scope1 + scope2 + scope3;
   const annual = (totalMonthly * 12) / 1000;
-  const perEmployee = (totalMonthly * 12) / (userData.employees || 1);
+  const perEmployee = (totalMonthly * 12) / empCount;
   const offsetCost = annual * 15;
 
-  const tonsMonthly = totalMonthly / 1000;
+  const s1Tons = (scope1 / 1000) / empCount;
+  const s2Tons = (scope2 / 1000) / empCount;
+  const s3Tons = (scope3 / 1000) / empCount;
+  const tonsMonthlyIntensity = s1Tons + s2Tons + s3Tons;
+
   let riskLevel = "Low";
-  if (tonsMonthly > 15) {
+  if (tonsMonthlyIntensity > 15) {
     riskLevel = "High";
-  } else if (tonsMonthly >= 5) {
+  } else if (tonsMonthlyIntensity >= 5) {
     riskLevel = "Medium";
   }
 
   return {
-    scope1: scope1 / 1000, // convert to tons
-    scope2: scope2 / 1000,
-    scope3: scope3 / 1000,
-    total: tonsMonthly,
+    scope1: s1Tons,
+    scope2: s2Tons,
+    scope3: s3Tons,
+    total: tonsMonthlyIntensity,
     annual,
     perEmployee,
     offsetCost,
@@ -49,7 +54,7 @@ export const saveRecord = async (userEmail, userData, results) => {
     s3: results.scope3,
     total: results.total,
     risk: results.riskLevel,
-    fullData: userData,
+    fullData: { ...userData, results }, // Store results inside fullData for the report generator
   };
 
   // 1. Local Storage Sync (Immediate feedback)

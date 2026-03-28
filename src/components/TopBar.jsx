@@ -1,8 +1,8 @@
 import React from 'react';
-import { Bell, Search, User, X, Check } from 'lucide-react';
+import { Bell, Search, User, X, Check, Menu } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
-const TopBar = ({ isAdmin = false }) => {
+const TopBar = ({ isAdmin = false, onMenuClick }) => {
   const { currentUser, adminAuth, updateName } = useAuth();
   const [showProfile, setShowProfile] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -39,7 +39,14 @@ const TopBar = ({ isAdmin = false }) => {
 
   return (
     <header className="topbar">
-      <div className="topbar-left">
+      <div className="topbar-left" style={{ gap: '1rem' }}>
+        <button 
+          className="btn-icon mobile-only-flex" 
+          onClick={onMenuClick}
+          style={{ display: 'none' }} // Hidden by default, shown by media query
+        >
+          <Menu size={24} />
+        </button>
         <div className="search-bar" style={{ position: 'relative' }}>
           <Search size={18} style={{ position: 'absolute', left: '10px', top: '11px', color: 'var(--text-muted)' }} />
           <input 

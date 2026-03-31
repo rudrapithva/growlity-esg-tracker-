@@ -43,16 +43,22 @@ const TopBar = ({ isAdmin = false, onMenuClick }) => {
         <button 
           className="btn-icon mobile-only-flex" 
           onClick={onMenuClick}
-          style={{ display: 'none' }} // Hidden by default, shown by media query
+          style={{ display: 'none' }} 
         >
           <Menu size={24} />
         </button>
-        <div className="search-bar" style={{ position: 'relative' }}>
+        <div className="search-bar" style={{ position: 'relative', flex: 1, maxWidth: '400px' }}>
           <Search size={18} style={{ position: 'absolute', left: '10px', top: '11px', color: 'var(--text-muted)' }} />
           <input 
             type="text" 
-            placeholder="Search resources..." 
-            style={{ paddingLeft: '2.5rem', width: '300px', height: '40px', borderRadius: 'var(--radius-full)' }} 
+            placeholder="Search..." 
+            style={{ 
+              paddingLeft: '2.5rem', 
+              width: '100%', 
+              height: '40px', 
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.875rem'
+            }} 
           />
         </div>
       </div>
@@ -62,19 +68,12 @@ const TopBar = ({ isAdmin = false, onMenuClick }) => {
           <Bell size={20} />
         </button>
         <div className="user-profile" onClick={openProfile}>
-          <div className="avatar" style={{ 
-            backgroundColor: isAdmin ? 'var(--primary)' : 'var(--secondary)',
-            width: '32px', height: '32px', borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF'
-          }}>
+          <div className="avatar">
             {isAdmin ? 'AD' : displayName.charAt(0).toUpperCase()}
           </div>
-          <div className="user-info">
+          <div className="user-info hide-mobile">
             <span className="name">{displayName}</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span className="role">{role}</span>
-            </div>
+            <span className="role">{role}</span>
           </div>
         </div>
       </div>

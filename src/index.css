@@ -88,6 +88,13 @@ a:hover {
     color: var(--secondary-hover);
 }
 
+/* Typography & Responsiveness */
+@media (max-width: 768px) {
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.25rem !important; }
+    body { font-size: 0.875rem; }
+}
+
 /* Layout - SaaS Portal */
 .app-layout {
     display: flex;
@@ -217,6 +224,14 @@ a:hover {
     position: sticky;
     top: 0;
     z-index: 90;
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 1rem;
+        height: 64px;
+    }
 }
 
 .topbar-left,
@@ -283,15 +298,9 @@ a:hover {
     font-size: 0.875rem;
 }
 
-.user-info .name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    display: block;
-}
-
-.user-info .role {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+.user-info {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Page Content */
@@ -300,6 +309,13 @@ a:hover {
     padding: 2rem;
     overflow-y: auto;
     background-color: var(--bg-color);
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    .page-content {
+        padding: 1.25rem;
+    }
 }
 
 .page-header {
@@ -464,6 +480,9 @@ a:hover {
 /* Tables */
 .table-responsive {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 1rem;
 }
 
 table {
@@ -486,6 +505,7 @@ th {
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
 tbody tr {
@@ -893,14 +913,19 @@ textarea:focus {
 
 @media (max-width: 768px) {
     .sidebar {
-        position: absolute;
-        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         transform: translateX(-100%);
+        z-index: 200;
+        padding-top: env(safe-area-inset-top);
     }
 
     .sidebar.mobile-open {
         transform: translateX(0);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+        box-shadow: none;
     }
 
     .sidebar-overlay {
@@ -909,9 +934,9 @@ textarea:focus {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-        z-index: 95;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        z-index: 190;
         transition: var(--transition);
         display: block;
     }
@@ -938,6 +963,10 @@ textarea:focus {
     .mobile-only-flex {
         display: flex !important;
     }
+
+    .table-responsive table {
+        min-width: 850px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -948,4 +977,16 @@ textarea:focus {
     .page-content {
         padding: 1rem;
     }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+}
+
+.show-mobile {
+    display: none;
 }

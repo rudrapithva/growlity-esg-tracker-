@@ -51,67 +51,69 @@ const AdminCompliance = () => {
           <h1>Compliance Audit Stream</h1>
           <p>Real-time oversight of all carbon calculations across the Growlity network.</p>
         </div>
-        <div className="page-actions">
-           <button className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="page-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+           <button className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
             <Download size={18} /> Audit Export (JSON/CSV)
            </button>
         </div>
       </div>
 
-      <div className="card">
-        <table className="history-table">
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Enterprise Client</th>
-              <th>Action Profile</th>
-              <th>Intensity</th>
-              <th>Risk Profile</th>
-              <th>Protocol Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((log, i) => (
-              <tr key={i}>
-                <td style={{ fontFamily: 'monospace', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Clock size={12} /> {log.timestamp}
-                  </div>
-                </td>
-                <td style={{ fontWeight: 600 }}>{log.enterprise}</td>
-                <td>
-                  <span style={{ 
-                    background: 'var(--primary-muted)', 
-                    color: 'var(--primary)', 
-                    padding: '2px 8px', 
-                    borderRadius: '4px', 
-                    fontSize: '0.7rem', 
-                    fontWeight: 700,
-                    textTransform: 'uppercase'
-                  }}>Calculation</span>
-                </td>
-                <td style={{ fontWeight: 700 }}>{log.total.toLocaleString()} t</td>
-                <td>
-                  <span className={`badge badge-${log.risk === 'High' ? 'danger' : log.risk === 'Medium' ? 'warning' : 'success'}`} style={{ fontSize: '0.75rem' }}>
-                    {log.risk} Intensity
-                  </span>
-                </td>
-                <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: 'var(--success)', fontWeight: 500 }}>
-                        <FileCheck size={14} /> Verified Protocol
-                    </div>
-                </td>
-              </tr>
-            ))}
-            {logs.length === 0 && (
+      <div className="card" style={{ padding: 0 }}>
+        <div className="table-responsive">
+          <table className="history-table">
+            <thead>
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-                  No calculations have been logged on the platform yet.
-                </td>
+                <th>Timestamp</th>
+                <th>Enterprise Client</th>
+                <th>Action Profile</th>
+                <th>Intensity</th>
+                <th>Risk Profile</th>
+                <th>Protocol Status</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {logs.map((log, i) => (
+                <tr key={i}>
+                  <td style={{ fontFamily: 'monospace', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Clock size={12} /> {log.timestamp}
+                    </div>
+                  </td>
+                  <td style={{ fontWeight: 600 }}>{log.enterprise}</td>
+                  <td>
+                    <span style={{ 
+                      background: 'var(--primary-muted)', 
+                      color: 'var(--primary)', 
+                      padding: '2px 8px', 
+                      borderRadius: '4px', 
+                      fontSize: '0.7rem', 
+                      fontWeight: 700,
+                      textTransform: 'uppercase'
+                    }}>Calculation</span>
+                  </td>
+                  <td style={{ fontWeight: 700 }}>{log.total.toLocaleString()} t</td>
+                  <td>
+                    <span className={`badge badge-${log.risk === 'High' ? 'danger' : log.risk === 'Medium' ? 'warning' : 'success'}`} style={{ fontSize: '0.75rem' }}>
+                      {log.risk} Intensity
+                    </span>
+                  </td>
+                  <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: 'var(--success)', fontWeight: 500 }}>
+                          <FileCheck size={14} /> Verified Protocol
+                      </div>
+                  </td>
+                </tr>
+              ))}
+              {logs.length === 0 && (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
+                    No calculations have been logged on the platform yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

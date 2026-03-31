@@ -114,15 +114,23 @@ const CalculatorPage = () => {
                 </div>
               </div>
             </div>
-            <div className="form-group" style={{ maxWidth: '400px' }}>
+            <div className="form-group" style={{ maxWidth: '100%' }}>
               <label>Workforce Size (FTE)</label>
               <div className="input-wrapper">
                 <Users size={18} />
                 <input type="number" id="employees" value={formData.employees} onChange={handleInputChange} placeholder="Total employees..." min="1" required />
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-              <button className="btn btn-primary" onClick={nextStep}>
+            <div className="calculator-actions" style={{ 
+              display: 'flex', 
+              flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+              justifyContent: 'flex-end', 
+              marginTop: '2rem', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid var(--border-color)',
+              gap: '1rem'
+            }}>
+              <button className="btn btn-primary" onClick={nextStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}>
                 Configure Scope 1 <ArrowRight size={18} />
               </button>
             </div>
@@ -151,9 +159,17 @@ const CalculatorPage = () => {
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-              <button className="btn btn-outline" onClick={prevStep}><ArrowLeft size={18} /> Entity Profile</button>
-              <button className="btn btn-primary" onClick={nextStep}>Configure Scope 2 <ArrowRight size={18} /></button>
+            <div className="calculator-actions" style={{ 
+              display: 'flex', 
+              flexDirection: window.innerWidth < 768 ? 'column-reverse' : 'row',
+              justifyContent: 'space-between', 
+              marginTop: '2rem', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid var(--border-color)',
+              gap: '1rem'
+            }}>
+              <button className="btn btn-outline" onClick={prevStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}><ArrowLeft size={18} /> Entity Profile</button>
+              <button className="btn btn-primary" onClick={nextStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}>Configure Scope 2 <ArrowRight size={18} /></button>
             </div>
           </section>
         );
@@ -164,16 +180,24 @@ const CalculatorPage = () => {
               <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>Scope 2: Location-Based Energy</h2>
               <p style={{ color: 'var(--text-secondary)' }}>Indirect emissions from the generation of purchased energy.</p>
             </div>
-            <div className="form-group" style={{ maxWidth: '500px' }}>
+            <div className="form-group" style={{ maxWidth: '100%' }}>
               <label>Purchased Grid Electricity (kWh)</label>
               <div className="input-wrapper">
                 <Zap size={18} />
                 <input type="number" id="electricity" value={formData.electricity} onChange={handleInputChange} placeholder="Monthly kWh..." />
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-              <button className="btn btn-outline" onClick={prevStep}><ArrowLeft size={18} /> Scope 1</button>
-              <button className="btn btn-primary" onClick={nextStep}>Configure Scope 3 <ArrowRight size={18} /></button>
+            <div className="calculator-actions" style={{ 
+              display: 'flex', 
+              flexDirection: window.innerWidth < 768 ? 'column-reverse' : 'row',
+              justifyContent: 'space-between', 
+              marginTop: '2rem', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid var(--border-color)',
+              gap: '1rem'
+            }}>
+              <button className="btn btn-outline" onClick={prevStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}><ArrowLeft size={18} /> Scope 1</button>
+              <button className="btn btn-primary" onClick={nextStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}>Configure Scope 3 <ArrowRight size={18} /></button>
             </div>
           </section>
         );
@@ -200,10 +224,18 @@ const CalculatorPage = () => {
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--border-color)' }}>
-              <button className="btn btn-outline" onClick={prevStep}><ArrowLeft size={18} /> Scope 2</button>
-              <button className="btn btn-primary" onClick={handleCalculate} style={{ padding: '1rem 2.5rem', border: 'none' }}>
-                <CalcIcon size={18} /> Generate ESG Analysis
+            <div className="calculator-actions" style={{ 
+              display: 'flex', 
+              flexDirection: window.innerWidth < 768 ? 'column-reverse' : 'row',
+              justifyContent: 'space-between', 
+              marginTop: '2rem', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid var(--border-color)',
+              gap: '1rem'
+            }}>
+              <button className="btn btn-outline" onClick={prevStep} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}><ArrowLeft size={18} /> Scope 2</button>
+              <button className="btn btn-primary" onClick={handleCalculate} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}>
+                <CalcIcon size={18} /> Generate Analysis
               </button>
             </div>
           </section>
@@ -236,11 +268,11 @@ const CalculatorPage = () => {
           maintainAspectRatio: false,
           plugins: {
             legend: { 
-              position: 'bottom', 
+              position: window.innerWidth < 768 ? 'bottom' : 'right', 
               labels: { 
                 usePointStyle: true, 
-                padding: 30,
-                font: { family: 'inherit', size: 12, weight: '500' },
+                padding: 20,
+                font: { family: 'inherit', size: 11, weight: '500' },
                 color: 'var(--text-secondary)'
               } 
             }
@@ -251,88 +283,76 @@ const CalculatorPage = () => {
           <section className="animate-fade-in">
             <div className="page-header" style={{ marginBottom: '1.5rem' }}>
               <div className="page-title">
-                <h1 style={{ fontSize: '2rem', letterSpacing: '-0.02em' }}>Impact Assessment: {currentRecord?.entity}</h1>
-                <p style={{ fontSize: '0.875rem' }}>Detailed breakdown of environmental intensity metrics and risk profiling.</p>
+                <h1 style={{ fontSize: '1.75rem', letterSpacing: '-0.02em' }}>Impact Assessment: {currentRecord?.entity}</h1>
+                <p style={{ fontSize: '0.8125rem' }}>Detailed environmental intensity and risk profile.</p>
               </div>
-              <div className={`badge badge-${currentRecord?.risk === 'High' ? 'danger' : currentRecord?.risk === 'Medium' ? 'warning' : 'success'}`} style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
-                <Shield size={16} /> {currentRecord?.risk} Intensity Profile
+              <div className={`badge badge-${currentRecord?.risk === 'High' ? 'danger' : currentRecord?.risk === 'Medium' ? 'warning' : 'success'}`} style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}>
+                <Shield size={14} /> {currentRecord?.risk} Intensity
               </div>
             </div>
             
-            <div className="kpi-grid" style={{ marginBottom: '1.5rem', gap: '1rem' }}>
-              <div className="kpi-card purple" style={{ padding: '1.25rem' }}>
+            <div className="grid-2" style={{ marginBottom: '1.5rem' }}>
+              <div className="kpi-card purple" style={{ padding: '1rem' }}>
                 <div className="kpi-top">
                   <div className="kpi-content">
-                    <h3 style={{ fontSize: '0.7rem' }}>Total Carbon Intensity</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.total?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
+                    <h3 style={{ fontSize: '0.65rem' }}>Total Intensity</h3>
+                    <p className="kpi-value" style={{ fontSize: '1.25rem' }}>{currentRecord?.total?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
-                  <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Cloud size={20} /></div>
-                </div>
-                <div className="kpi-footer" style={{ fontSize: '0.7rem' }}>
-                  <span>tCO2e per period</span>
+                  <div className="kpi-icon" style={{ width: '32px', height: '32px' }}><Cloud size={18} /></div>
                 </div>
               </div>
               
-              <div className="kpi-card blue" style={{ padding: '1.25rem' }}>
+              <div className="kpi-card blue" style={{ padding: '1rem' }}>
                 <div className="kpi-top">
                   <div className="kpi-content">
-                    <h3 style={{ fontSize: '0.7rem' }}>Direct (Scope 1)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s1?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
+                    <h3 style={{ fontSize: '0.65rem' }}>Direct (Scope 1)</h3>
+                    <p className="kpi-value" style={{ fontSize: '1.25rem' }}>{currentRecord?.s1?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
-                  <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Flame size={20} /></div>
-                </div>
-                <div className="kpi-footer" style={{ fontSize: '0.7rem' }}>
-                  <span>tons CO2e</span>
+                  <div className="kpi-icon" style={{ width: '32px', height: '32px' }}><Flame size={18} /></div>
                 </div>
               </div>
 
-              <div className="kpi-card yellow" style={{ padding: '1.25rem' }}>
+              <div className="kpi-card yellow" style={{ padding: '1rem' }}>
                 <div className="kpi-top">
                   <div className="kpi-content">
-                    <h3 style={{ fontSize: '0.7rem' }}>Energy (Scope 2)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s2?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
+                    <h3 style={{ fontSize: '0.65rem' }}>Energy (Scope 2)</h3>
+                    <p className="kpi-value" style={{ fontSize: '1.25rem' }}>{currentRecord?.s2?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
-                  <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Zap size={20} /></div>
-                </div>
-                <div className="kpi-footer" style={{ fontSize: '0.7rem' }}>
-                  <span>tons CO2e</span>
+                  <div className="kpi-icon" style={{ width: '32px', height: '32px' }}><Zap size={18} /></div>
                 </div>
               </div>
 
-              <div className="kpi-card orange" style={{ padding: '1.25rem' }}>
+              <div className="kpi-card orange" style={{ padding: '1rem' }}>
                 <div className="kpi-top">
                   <div className="kpi-content">
-                    <h3 style={{ fontSize: '0.7rem' }}>Supply Chain (Scope 3)</h3>
-                    <p className="kpi-value" style={{ fontSize: '1.5rem' }}>{currentRecord?.s3?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
+                    <h3 style={{ fontSize: '0.65rem' }}>Supply Chain (Scope 3)</h3>
+                    <p className="kpi-value" style={{ fontSize: '1.25rem' }}>{currentRecord?.s3?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 3})}</p>
                   </div>
-                  <div className="kpi-icon" style={{ width: '36px', height: '36px' }}><Plane size={20} /></div>
-                </div>
-                <div className="kpi-footer" style={{ fontSize: '0.7rem' }}>
-                  <span>tons CO2e</span>
+                  <div className="kpi-icon" style={{ width: '32px', height: '32px' }}><Plane size={18} /></div>
                 </div>
               </div>
             </div>
 
-            <div className="grid-7-5" style={{ gap: '1.5rem', marginBottom: '1.5rem' }}>
-              <div className="card" style={{ background: 'var(--surface)', padding: '1.25rem', marginBottom: '0' }}>
-                <div className="card-header" style={{ marginBottom: '1rem' }}>
-                  <div className="card-title" style={{ fontSize: '1rem' }}>Distribution of Emissions</div>
+            <div className="grid-7-5" style={{ gap: '1rem', marginBottom: '1.5rem' }}>
+              <div className="card" style={{ background: 'var(--surface)', padding: '1rem', marginBottom: '0' }}>
+                <div className="card-header" style={{ marginBottom: '0.75rem' }}>
+                  <div className="card-title" style={{ fontSize: '0.925rem' }}>Emissions Breakdown</div>
                 </div>
-                <div style={{ height: '240px', padding: '0.5rem' }}>
+                <div style={{ height: '280px', padding: '0.25rem' }}>
                   <Doughnut data={chartData} options={chartOptions} />
                 </div>
               </div>
               
-              <div className="card" style={{ background: 'var(--surface)', padding: '1.25rem', marginBottom: '0' }}>
-                <div className="card-header" style={{ marginBottom: '1rem' }}>
-                  <div className="card-title" style={{ fontSize: '1rem' }}>Mitigation Roadmap</div>
+              <div className="card" style={{ background: 'var(--surface)', padding: '1rem', marginBottom: '0' }}>
+                <div className="card-header" style={{ marginBottom: '0.75rem' }}>
+                  <div className="card-title" style={{ fontSize: '0.925rem' }}>Mitigation Roadmap</div>
                 </div>
                 <div>
-                  <div style={{ backgroundColor: 'var(--bg-color)', borderLeft: `4px solid ${riskColor}`, padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
-                    <h4 style={{ marginBottom: '0.75rem', fontWeight: 600, fontSize: '0.9rem' }}>Recommended Actions</h4>
-                    <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div style={{ backgroundColor: 'var(--bg-color)', borderLeft: `4px solid ${riskColor}`, padding: '0.875rem', borderRadius: 'var(--radius-sm)' }}>
+                    <h4 style={{ marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.85rem' }}>Recommended Actions</h4>
+                    <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {getRecommendations(currentRecord?.risk).map((rec, i) => (
-                        <li key={i} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                        <li key={i} style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
                           <span style={{ color: riskColor }}>•</span> {rec}
                         </li>
                       ))}
@@ -342,12 +362,12 @@ const CalculatorPage = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
-              <button className="btn btn-outline" style={{ padding: '0.75rem 1.25rem' }} onClick={() => setStep(4)}>
-                <Edit size={16} /> Modify Assessment
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: '0.75rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-color)' }}>
+              <button className="btn btn-outline" style={{ padding: '0.625rem 1rem', fontSize: '0.8125rem' }} onClick={() => setStep(4)}>
+                <Edit size={14} /> Back
               </button>
-              <button className="btn btn-primary" style={{ padding: '0.75rem 1.25rem' }} onClick={() => generateESGReport(currentRecord)}>
-                <Download size={16} /> Export Formal ESG Report
+              <button className="btn btn-primary" style={{ padding: '0.625rem 1rem', fontSize: '0.8125rem' }} onClick={() => generateESGReport(currentRecord)}>
+                <Download size={14} /> Export ESG Report
               </button>
             </div>
           </section>
@@ -358,39 +378,39 @@ const CalculatorPage = () => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <div className="card" style={{ maxWidth: step === 5 ? '1200px' : '900px', margin: '0 auto', transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)', padding: '0' }}>
+    <div style={{ padding: '0.75rem' }}>
+      <div className="card" style={{ maxWidth: step === 5 ? '1200px' : '900px', margin: '0 auto', transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)', padding: '0', width: '100%' }}>
         {step !== 5 && (
-          <div style={{ padding: '3rem 3rem 0' }}>
-            <div className="progress-container" style={{ marginBottom: '3rem' }}>
-              <div className="progress-bar-bg" style={{ height: '8px', background: 'var(--border-color)', borderRadius: '10px', overflow: 'hidden' }}>
+          <div className="calculator-header-pad" style={{ padding: '1.5rem 1.5rem 0' }}>
+            <div className="progress-container" style={{ marginBottom: '2.5rem' }}>
+              <div className="progress-bar-bg" style={{ height: '6px', background: 'var(--border-color)', borderRadius: '10px', overflow: 'hidden' }}>
                 <div className="progress-bar" style={{ width: `${(step / 4) * 100}%`, height: '100%', background: 'var(--primary-gradient)', transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow: '0 0 15px var(--primary-glow)' }}></div>
               </div>
-              <div className="progress-steps" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.25rem' }}>
+              <div className="progress-steps" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {['Profile', 'Scope 1', 'Scope 2', 'Scope 3'].map((label, idx) => (
-                  <div key={idx} style={{ 
-                    fontSize: '0.8125rem', 
+                  <div key={idx} className="step-item" style={{ 
+                    fontSize: '0.7rem', 
                     fontWeight: step >= idx + 1 ? 700 : 500, 
                     color: step >= idx + 1 ? 'var(--primary)' : 'var(--text-muted)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem'
+                    gap: '0.375rem'
                   }}>
                     <div style={{ 
-                      width: '12px', 
-                      height: '12px', 
+                      width: '10px', 
+                      height: '10px', 
                       borderRadius: '50%', 
                       background: step >= idx + 1 ? 'var(--primary)' : 'var(--border-color)',
-                      boxShadow: step >= idx + 1 ? '0 0 10px var(--primary-glow)' : 'none'
+                      boxShadow: step >= idx + 1 ? '0 0 8px var(--primary-glow)' : 'none'
                     }} />
-                    {label}
+                    <span className="hide-mobile" style={{ display: window.innerWidth < 480 ? 'none' : 'inline' }}>{label}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         )}
-        <div style={{ padding: '2rem' }}>
+        <div className="calculator-content-body" style={{ padding: '1.25rem' }}>
           {renderStep()}
         </div>
       </div>

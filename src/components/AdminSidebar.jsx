@@ -7,8 +7,7 @@ import {
   Settings, 
   ChevronRight, 
   LogOut, 
-  ShieldCheck,
-  Globe
+  X
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
@@ -30,16 +29,32 @@ const AdminSidebar = ({ mobileOpen, onClose }) => {
 
   return (
     <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
-      <div className="sidebar-header" style={{ flexDirection: 'column', alignItems: 'flex-start', height: 'auto', padding: '1.5rem', gap: '1rem', borderBottom: '1px solid var(--border-color)' }}>
-        <img src="/assets/Growlity-Logo.webp" alt="Growlity" className="sidebar-logo" style={{ maxWidth: '120px', height: 'auto' }} />
-        <div className="sidebar-info" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          <span className="sidebar-name" style={{ fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--primary)' }}>
-            Admin Portal
-          </span>
-          <span className="sidebar-status" style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-            Global ESG Hub
-          </span>
+      <div className="sidebar-header" style={{ 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
+        height: 'auto', 
+        padding: '1.5rem', 
+        gap: '1rem', 
+        borderBottom: '1px solid var(--border-color)' 
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <img src="/assets/Growlity-Logo.webp" alt="Growlity" className="sidebar-logo" style={{ maxWidth: '100px', height: 'auto' }} />
+          <div className="sidebar-info" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span className="sidebar-name" style={{ fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--primary)' }}>
+              ESG Admin Portal
+            </span>
+          </div>
         </div>
+        
+        {/* Mobile Close Button */}
+        <button 
+          className="btn-icon mobile-only-flex" 
+          onClick={onClose}
+          style={{ display: 'none', color: 'var(--text-secondary)' }}
+        >
+          <X size={24} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
@@ -63,7 +78,7 @@ const AdminSidebar = ({ mobileOpen, onClose }) => {
             <button 
               onClick={handleAdminLogout} 
               className="nav-item" 
-              style={{ width: '100%', border: 'none', background: 'none', color: 'var(--danger)' }}
+              style={{ width: '100%', border: 'none', background: 'none', color: 'var(--danger)', padding: '0.875rem 1.25rem' }}
             >
               <LogOut className="nav-icon" size={20} />
               <span className="nav-text">Logout</span>

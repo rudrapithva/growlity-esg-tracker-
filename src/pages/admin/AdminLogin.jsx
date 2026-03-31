@@ -41,11 +41,15 @@ const AdminLogin = () => {
         <div className="auth-layout" style={{ 
             justifyContent: 'center', 
             alignItems: 'center',
-            background: 'radial-gradient(circle at 0% 0%, #1e1b4b 0%, #0f172a 100%)' 
+            background: 'radial-gradient(circle at 0% 0%, #1e1b4b 0%, #0f172a 100%)',
+            minHeight: '100vh',
+            padding: '2rem 1rem',
+            overflowY: 'auto'
         }}>
             <div className="auth-card" style={{ 
+                width: '100%',
                 maxWidth: '400px', 
-                padding: '2.5rem', 
+                padding: '2rem', 
                 background: '#ffffff',
                 border: '1px solid rgba(255,255,255,0.1)',
                 color: 'var(--dark)',

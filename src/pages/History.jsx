@@ -69,17 +69,17 @@ const History = () => {
           <h1>Environmental History Audit</h1>
           <p>Comprehensive record of all previous carbon footprint assessments and sustainability metrics.</p>
         </div>
-        <div className="page-actions" style={{ display: 'flex', gap: '1rem' }}>
-          <div className="input-wrapper" style={{ width: '280px' }}>
+        <div className="page-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <div className="input-wrapper" style={{ width: '100%', maxWidth: '280px' }}>
             <Filter size={18} />
-            <select value={riskFilter} onChange={e => setRiskFilter(e.target.value)}>
+            <select value={riskFilter} onChange={e => setRiskFilter(e.target.value)} style={{ width: '100%' }}>
               <option value="All">Filter by Intensity: All</option>
               <option value="High">High Priority Events</option>
               <option value="Medium">Medium Priority Events</option>
               <option value="Low">Low Priority Events</option>
             </select>
           </div>
-          <button className="btn btn-outline" onClick={handleExportCSV}>
+          <button className="btn btn-outline" onClick={handleExportCSV} style={{ whiteSpace: 'nowrap' }}>
             <Download size={18} /> Export CSV
           </button>
         </div>
